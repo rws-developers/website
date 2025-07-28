@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rootie Tootie Western Shootie - Virtual Axolotl</title>
+    <link rel="icon" type="image/png" href="Art/Game-Logo/RTWS-logo_360x360.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Rootie Tootie Western Shootie</h1>
+                <p class="company">by Virtual Axolotl</p>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="privacy-policy.html" class="nav-link">Privacy Policy</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-banner">
+        <img src="Art/Cover-Art/Hero-Cover_5120x2880.png" alt="Rootie Tootie Western Shootie Cover Art" class="hero-banner-image">
+    </section>
+
+    <section class="features-grid-section">
+        <div class="container">
+            <div class="features-grid" id="featuresGrid">
+                <div class="feature-item" onclick="toggleFullscreen(this)">
+                    <img src="Art/Feature-Cards/Bargain_Barn_2560x1440.png" alt="Bargain Barn Feature">
+                </div>
+                <div class="feature-item" onclick="toggleFullscreen(this)">
+                    <img src="Art/Feature-Cards/Bargain_Barn_2_2560x1440.png" alt="Bargain Barn Feature 2">
+                </div>
+                <div class="feature-item" onclick="toggleFullscreen(this)">
+                    <img src="Art/Feature-Cards/Fools_Gold_2560x1440.png" alt="Fools Gold Feature">
+                </div>
+                <div class="feature-item" onclick="toggleFullscreen(this)">
+                    <img src="Art/Feature-Cards/Fort_Deathmatch_2560x1440.png" alt="Fort Deathmatch Feature">
+                </div>
+                <div class="feature-item" onclick="toggleFullscreen(this)">
+                    <img src="Art/Feature-Cards/Laundry_Day_2560x1440.png" alt="Laundry Day Feature">
+                </div>
+                <div class="feature-item" onclick="toggleFullscreen(this)">
+                    <img src="Art/Feature-Cards/Shooting_Range_2560x1440.png" alt="Shooting Range Feature">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="fullscreen-overlay" id="fullscreenOverlay" onclick="closeFullscreen()">
+        <img src="" alt="" id="fullscreenImage">
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <h2>Meet the Team</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-card-content">
+                        <h3>Shane Nalezyty</h3>
+                        <p class="role">All Things Code</p>
+                        <p class="description">Bringing the wild west to life through code, Shane handles all the programming that makes the bullets fly and the cowboys draw.</p>
+                        <a href="https://github.com/Digital-Shane" class="team-link" target="_blank">More from Shane</a>
+                    </div>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-card-content">
+                        <h3>Bryan Bethel</h3>
+                        <p class="role">All Things Art</p>
+                        <p class="description">Creating the visual frontier, Bryan crafts all the stunning maps that gives our western world its authentic dusty charm.</p>
+                        <a href="https://www.instagram.com/bryan_bethel_art" class="team-link" target="_blank">More from Bryan</a>
+                    </div>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-card-content">
+                        <h3>Caleb Long</h3>
+                        <p class="role">All Things Music</p>
+                        <p class="description">Composing the soundtrack of the frontier, Caleb creates the musical atmosphere that sets the mood for every showdown.</p>
+                        <a href="https://calstevens.bandcamp.com/" class="team-link" target="_blank">More from Caleb</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+<!--<section class="section dev-story-section">
+        <div class="container">
+            <h2>Development Story</h2>
+            <div class="dev-story">
+                <p>Rootie Tootie Western Shootie has been lovingly under development since 2019, and we are finally ready to share our creation with the world</p>
+            </div>
+        </div>
+    </section> -->
+
+    <script>
+        // Fullscreen functionality for grid images
+        function toggleFullscreen(element) {
+            const overlay = document.getElementById('fullscreenOverlay');
+            const fullscreenImage = document.getElementById('fullscreenImage');
+            const img = element.querySelector('img');
+            
+            // Only open fullscreen, don't toggle if already open
+            if (!overlay.classList.contains('active')) {
+                fullscreenImage.src = img.src;
+                fullscreenImage.alt = img.alt;
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeFullscreen() {
+            const overlay = document.getElementById('fullscreenOverlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close fullscreen on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeFullscreen();
+            }
+        });
+
+        // Close fullscreen when clicking anywhere on the overlay (including the image)
+        document.getElementById('fullscreenOverlay').addEventListener('click', function(e) {
+            closeFullscreen();
+        });
+    </script>
+</body>
+</html>
