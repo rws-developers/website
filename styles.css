@@ -117,6 +117,7 @@ h1 {
     align-items: center;
     justify-content: center;
     background: #2c1810;
+    padding: 20px;
 }
 
 .hero-banner-image {
@@ -125,6 +126,7 @@ h1 {
     object-fit: contain;
     object-position: center;
     display: block;
+    border-radius: 8px;
 }
 
 .hero-banner-text {
@@ -444,10 +446,85 @@ h1 {
 }
 
 /* Privacy Policy Styles */
+.privacy-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.privacy-header h1 {
+    font-size: 3rem;
+    color: #ffd700;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+    margin-bottom: 0.5rem;
+}
+
+.privacy-header .company {
+    font-size: 1.2rem;
+    color: #ddd;
+    font-style: italic;
+}
+
 .privacy-content {
     max-width: 800px;
     margin: 0 auto;
     text-align: left;
+}
+
+.back-to-home {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.home-link {
+    display: inline-block;
+    color: #ffd700;
+    text-decoration: none;
+    padding: 12px 24px;
+    border: 2px solid #ffd700;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.home-link:hover {
+    background: #ffd700;
+    color: #2c1810;
+}
+
+/* Footer Content Layout */
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+.contact-content, .privacy-content {
+    text-align: center;
+}
+
+.privacy-link, .contact-link {
+    display: inline-block;
+    color: #ffd700;
+    text-decoration: none;
+    padding: 12px 24px;
+    border: 2px solid #ffd700;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+.privacy-link:hover, .contact-link:hover {
+    background: #ffd700;
+    color: #2c1810;
 }
 
 .privacy-section {
@@ -516,6 +593,15 @@ h1 {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .privacy-header h1 {
+        font-size: 2rem;
+    }
+    
     header .container {
         flex-direction: column;
         gap: 1rem;
