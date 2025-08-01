@@ -11,6 +11,34 @@ body {
     line-height: 1.6;
 }
 
+/* Site Header */
+.site-header {
+    width: 100%;
+    background: linear-gradient(135deg, #1a0f08, #2c1810);
+    border-bottom: 2px solid #8b4513;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.logo-banner-link {
+    display: block;
+    width: 100%;
+    transition: opacity 0.3s ease;
+}
+
+.logo-banner-link:hover {
+    opacity: 0.9;
+}
+
+.logo-banner {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    background: transparent;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
