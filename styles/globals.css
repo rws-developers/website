@@ -1,0 +1,53 @@
+:root {
+  --range-night: #0f0b08;
+  --range-deep: #20140d;
+  --dust-gold: #d8a15b;
+  --signal-cyan: #7cb8c9;
+  --text-light: #f5e8d4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#__next {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 78% -20%, #7cb8c918 0%, transparent 42%),
+    radial-gradient(circle at 5% 110%, #d8a15b3d 0%, transparent 40%),
+    linear-gradient(165deg, var(--range-deep), var(--range-night));
+  color: var(--text-light);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.2;
+  background:
+    radial-gradient(circle at 25% 22%, #d8a15b23 0%, transparent 36%),
+    radial-gradient(circle at 72% 72%, #7cb8c910 0%, transparent 38%);
+}
+
+a {
+  color: inherit;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
