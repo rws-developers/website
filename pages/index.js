@@ -1,8 +1,13 @@
 import { useState } from 'react';
+import fs from 'node:fs';
+import path from 'node:path';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
+import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
+import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import LaunchRoundedIcon from '@mui/icons-material/LaunchRounded';
+import PlayCircleFilledWhiteRoundedIcon from '@mui/icons-material/PlayCircleFilledWhiteRounded';
 import StorefrontRoundedIcon from '@mui/icons-material/StorefrontRounded';
 import {
   Box,
@@ -14,11 +19,36 @@ import {
   Dialog,
   DialogContent,
   Grid,
+  IconButton,
   Stack,
   Typography
 } from '@mui/material';
 import SiteFrame from '../site/SiteFrame';
 import heroLinks from '../site/heroLinks';
+
+const teamMembers = [
+  {
+    name: 'Shane Nalezyty',
+    role: 'Engineering',
+    description:
+      'Owns gameplay programming, multiplayer systems, and all the code that makes every duel feel sharp.',
+    link: 'https://github.com/Digital-Shane'
+  },
+  {
+    name: 'Bryan Bethel',
+    role: 'Art Direction',
+    description:
+      'Builds the visual identity of the frontier with handcrafted worlds, set dressing, and mood-driven map art.',
+    link: 'https://www.instagram.com/bryan_bethel_art'
+  },
+  {
+    name: 'Caleb Long',
+    role: 'Music',
+    description:
+      'Shapes the studio sound with western-inspired tracks that keep every high-noon match cinematic.',
+    link: 'https://calstevens.bandcamp.com/'
+  }
+];
 
 const showcaseShots = [
   {
@@ -47,33 +77,43 @@ const showcaseShots = [
   }
 ];
 
-const teamMembers = [
-  {
-    name: 'Shane Nalezyty',
-    role: 'Engineering',
-    description:
-      'Owns gameplay programming, multiplayer systems, and all the code that makes every duel feel sharp.',
-    link: 'https://github.com/Digital-Shane'
-  },
-  {
-    name: 'Bryan Bethel',
-    role: 'Art Direction',
-    description:
-      'Builds the visual identity of the frontier with handcrafted worlds, set dressing, and mood-driven map art.',
-    link: 'https://www.instagram.com/bryan_bethel_art'
-  },
-  {
-    name: 'Caleb Long',
-    role: 'Music',
-    description:
-      'Shapes the studio sound with western-inspired tracks that keep every high-noon match cinematic.',
-    link: 'https://calstevens.bandcamp.com/'
-  }
-];
+const clipNamePattern = /^\d+\.mp4$/i;
 
-export default function HomePage() {
+export default function HomePage({ highlightClips = [] }) {
   const [selectedFeature, setSelectedFeature] = useState(null);
+  const [selectedClipIndex, setSelectedClipIndex] = useState(null);
   const visibleHeroLinks = heroLinks.filter((item) => item.url && item.url.trim().length > 0);
+
+  const openClipViewer = (clipIndex) => setSelectedClipIndex(clipIndex);
+  const closeClipViewer = () => setSelectedClipIndex(null);
+
+  const showPreviousClip = () => {
+    if (highlightClips.length === 0) {
+      return;
+    }
+
+    setSelectedClipIndex((currentIndex) => {
+      if (currentIndex === null) {
+        return 0;
+      }
+
+      return (currentIndex - 1 + highlightClips.length) % highlightClips.length;
+    });
+  };
+
+  const showNextClip = () => {
+    if (highlightClips.length === 0) {
+      return;
+    }
+
+    setSelectedClipIndex((currentIndex) => {
+      if (currentIndex === null) {
+        return 0;
+      }
+
+      return (currentIndex + 1) % highlightClips.length;
+    });
+  };
 
   return (
     <>
@@ -177,6 +217,7 @@ export default function HomePage() {
               <Typography variant="h2" sx={{ mt: 0.8, mb: 3.2, fontSize: { xs: '2rem', md: '2.8rem' } }}>
                 Gameplay Highlights
               </Typography>
+
               <Grid container spacing={2.6} sx={{ mt: 0.6 }}>
                 {showcaseShots.map((feature, index) => (
                   <Grid key={feature.src} item xs={12} sm={6} md={4}>
@@ -211,6 +252,104 @@ export default function HomePage() {
                   </Grid>
                 ))}
               </Grid>
+
+              {highlightClips.length > 0 ? (
+                <Box
+                  sx={{
+                    mt: 3.6,
+                    display: 'grid',
+                    gridAutoFlow: 'column',
+                    gap: 2.6,
+                    overflowX: 'auto',
+                    pb: 1,
+                    gridAutoColumns: {
+                      xs: 'minmax(250px, 82vw)',
+                      sm: 'minmax(300px, 58vw)',
+                      md: 'minmax(320px, 34vw)',
+                      lg: 'minmax(320px, 29vw)'
+                    },
+                    scrollSnapType: 'x mandatory',
+                    '&::-webkit-scrollbar': {
+                      height: 8
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: 'rgba(216, 161, 91, 0.45)',
+                      borderRadius: 8
+                    }
+                  }}
+                >
+                  {highlightClips.map((clipSrc, index) => (
+                    <Card
+                      key={clipSrc}
+                      sx={{
+                        overflow: 'hidden',
+                        borderRadius: 1.5,
+                        border: '1px solid rgba(216, 161, 91, 0.28)',
+                        backgroundImage:
+                          'linear-gradient(165deg, rgba(38, 23, 14, 0.95), rgba(14, 22, 34, 0.95))',
+                        animation: `riseIn 620ms ease-out ${index * 70}ms both`,
+                        transition: 'transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease',
+                        scrollSnapAlign: 'start',
+                        '&:hover': {
+                          transform: 'translateY(-6px)',
+                          boxShadow: '0 18px 40px rgba(0, 0, 0, 0.4)',
+                          borderColor: 'rgba(240, 201, 142, 0.7)'
+                        }
+                      }}
+                    >
+                      <CardActionArea onClick={() => openClipViewer(index)}>
+                        <Box sx={{ position: 'relative', width: '100%', aspectRatio: '16 / 9' }}>
+                          <Box
+                            component="video"
+                            src={clipSrc}
+                            preload="metadata"
+                            muted
+                            playsInline
+                            aria-hidden
+                            sx={{
+                              display: 'block',
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              pointerEvents: 'none',
+                              backgroundColor: 'rgba(11, 6, 3, 0.95)'
+                            }}
+                          />
+                          <Box
+                            sx={{
+                              position: 'absolute',
+                              inset: 0,
+                              background:
+                                'linear-gradient(180deg, rgba(0, 0, 0, 0.08) 35%, rgba(0, 0, 0, 0.48) 100%)'
+                            }}
+                          />
+                          <Box
+                            sx={{
+                              position: 'absolute',
+                              inset: 0,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                          >
+                            <PlayCircleFilledWhiteRoundedIcon
+                              sx={{
+                                fontSize: { xs: 64, md: 72 },
+                                color: 'rgba(255, 255, 255, 0.95)',
+                                filter: 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55))'
+                              }}
+                            />
+                          </Box>
+                        </Box>
+                      </CardActionArea>
+                    </Card>
+                  ))}
+                </Box>
+              ) : (
+                <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+                  No gameplay clips found in the /public/Clips folder.
+                </Typography>
+              )}
             </Box>
 
             <Box>
@@ -345,6 +484,122 @@ export default function HomePage() {
           ) : null}
         </DialogContent>
       </Dialog>
+
+      <Dialog
+        open={selectedClipIndex !== null}
+        onClose={closeClipViewer}
+        maxWidth="xl"
+        fullWidth
+      >
+        <DialogContent sx={{ p: { xs: 0.6, sm: 1 }, backgroundColor: 'rgba(4, 5, 8, 0.96)' }}>
+          {selectedClipIndex !== null ? (
+            <Box
+              sx={{
+                position: 'relative',
+                width: '100%',
+                maxHeight: '78vh',
+                minHeight: { xs: '42vh', sm: '52vh', md: '68vh' },
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#000',
+                borderRadius: 1,
+                overflow: 'hidden'
+              }}
+            >
+              <IconButton
+                onClick={showPreviousClip}
+                aria-label="Previous clip"
+                disabled={highlightClips.length < 2}
+                sx={{
+                  position: 'absolute',
+                  left: { xs: 6, md: 14 },
+                  zIndex: 2,
+                  width: { xs: 44, md: 54 },
+                  height: { xs: 44, md: 54 },
+                  color: '#fff',
+                  border: '1px solid rgba(216, 161, 91, 0.62)',
+                  backgroundColor: 'rgba(17, 10, 7, 0.56)',
+                  backdropFilter: 'blur(4px)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(25, 15, 10, 0.82)'
+                  },
+                  '&.Mui-disabled': {
+                    color: 'rgba(255, 255, 255, 0.32)',
+                    borderColor: 'rgba(255, 255, 255, 0.16)'
+                  }
+                }}
+              >
+                <ChevronLeftRoundedIcon sx={{ fontSize: { xs: 32, md: 38 } }} />
+              </IconButton>
+
+              <Box
+                component="video"
+                key={highlightClips[selectedClipIndex]}
+                src={highlightClips[selectedClipIndex]}
+                controls
+                autoPlay
+                preload="metadata"
+                playsInline
+                sx={{
+                  display: 'block',
+                  width: '100%',
+                  maxHeight: '78vh',
+                  objectFit: 'contain'
+                }}
+              />
+
+              <IconButton
+                onClick={showNextClip}
+                aria-label="Next clip"
+                disabled={highlightClips.length < 2}
+                sx={{
+                  position: 'absolute',
+                  right: { xs: 6, md: 14 },
+                  zIndex: 2,
+                  width: { xs: 44, md: 54 },
+                  height: { xs: 44, md: 54 },
+                  color: '#fff',
+                  border: '1px solid rgba(216, 161, 91, 0.62)',
+                  backgroundColor: 'rgba(17, 10, 7, 0.56)',
+                  backdropFilter: 'blur(4px)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(25, 15, 10, 0.82)'
+                  },
+                  '&.Mui-disabled': {
+                    color: 'rgba(255, 255, 255, 0.32)',
+                    borderColor: 'rgba(255, 255, 255, 0.16)'
+                  }
+                }}
+              >
+                <ChevronRightRoundedIcon sx={{ fontSize: { xs: 32, md: 38 } }} />
+              </IconButton>
+            </Box>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const clipsDirectory = path.join(process.cwd(), 'public', 'Clips');
+  const clipFiles = fs.existsSync(clipsDirectory)
+    ? fs.readdirSync(clipsDirectory).filter((fileName) => clipNamePattern.test(fileName))
+    : [];
+
+  const highlightClips = clipFiles
+    .sort((leftName, rightName) => {
+      const leftNumber = Number.parseInt(leftName.replace(/\.mp4$/i, ''), 10);
+      const rightNumber = Number.parseInt(rightName.replace(/\.mp4$/i, ''), 10);
+
+      return leftNumber - rightNumber;
+    })
+    .map((fileName) => `/Clips/${fileName}`);
+
+  return {
+    props: {
+      highlightClips
+    }
+  };
 }
